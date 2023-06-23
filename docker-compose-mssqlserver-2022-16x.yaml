@@ -1,0 +1,27 @@
+version: '3.5'
+
+networks:
+   web-app-net:
+     name: my-web-app-net
+     driver: bridge
+
+volumes:
+   mssql-server-storage:
+
+services:
+   mssql-server:
+     image: mcr.microsoft.com/mssql/server:2022-latest
+     user: root
+     environment:
+       ACCEPT_EULA: Y
+       MSSQL_SA_PASSWORD: SA@12345
+       MSSQL_PID: Developer
+     ports:
+       - 1433:1433
+     networks:
+       - web-app-net
+     volumes:
+       - mssql-server-storage:/var/opt/mssql/data
+       - ./AdventureWorks:/AdventureWorks
+
+#end of scripts
