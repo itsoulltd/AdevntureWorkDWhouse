@@ -269,8 +269,8 @@ SELECT TOP 100
 	, lastname = p.LastName
 	, firstname = p.FirstName
 FROM Person.BusinessEntityContact bec
-INNER JOIN Person.ContactType ct ON ct.ContactTypeID = bec.ContactTypeID
-INNER JOIN Person.Person p ON p.BusinessEntityID = bec.PersonID
+INNER JOIN Person.ContactType ct ON bec.ContactTypeID = ct.ContactTypeID
+INNER JOIN Person.Person p ON bec.PersonID = p.BusinessEntityID
 WHERE 1=1
 	AND ct.Name = 'Purchasing Manager'
 ORDER BY lastname, firstname;
@@ -282,7 +282,7 @@ SELECT TOP 100
 	, lastname = p.LastName
 	, firstname = p.FirstName
 FROM Person.BusinessEntityContact bec
-INNER JOIN Person.Person p ON p.BusinessEntityID = bec.PersonID
+INNER JOIN Person.Person p ON bec.PersonID = p.BusinessEntityID
 WHERE 1=1
 	AND bec.ContactTypeID = (SELECT ct.ContactTypeID FROM Person.ContactType ct WHERE ct.Name = 'Purchasing Manager')
 ORDER BY lastname, firstname;
@@ -305,8 +305,8 @@ SELECT TOP 10
 	, salesytd = sp.SalesYTD 
 	, postcode = adds.PostalCode
 FROM Sales.SalesPerson sp
-INNER JOIN Person.Person p ON p.BusinessEntityID = sp.BusinessEntityID
-INNER JOIN Person.Address adds on adds.AddressID = sp.BusinessEntityID
+INNER JOIN Person.Person p ON sp.BusinessEntityID = p.BusinessEntityID
+INNER JOIN Person.Address adds on sp.BusinessEntityID = adds.AddressID
 WHERE 1=1
 	AND sp.TerritoryID IS NOT NULL
 	AND sp.SalesYTD <> 0
@@ -321,9 +321,9 @@ SELECT TOP 100
 	, postcode = adds.PostalCode
 FROM Sales.SalesPerson sp
 	INNER JOIN Person.Person p 
-		ON p.BusinessEntityID = sp.BusinessEntityID
+		ON sp.BusinessEntityID = p.BusinessEntityID
 	INNER JOIN Person.Address adds 
-		ON adds.AddressID = sp.BusinessEntityID
+		ON sp.BusinessEntityID = adds.AddressID
 WHERE 1=1
 	AND sp.TerritoryID IS NOT NULL
 	AND sp.SalesYTD <> 0
@@ -356,7 +356,7 @@ SELECT TOP 100
 	, nocontacts = COUNT(bec.BusinessEntityID)
 FROM Person.ContactType ct
 	INNER JOIN Person.BusinessEntityContact bec 
-		ON bec.ContactTypeID = ct.ContactTypeID
+		ON ct.ContactTypeID = bec.ContactTypeID
 GROUP BY ct.ContactTypeID, ct.Name
 HAVING COUNT(bec.BusinessEntityID) >= 100
 ORDER BY nocontacts DESC;
@@ -376,7 +376,7 @@ SELECT TOP 100
 	, salaryinaweek = (eph.Rate * 40)
 FROM Person.Person p
 	INNER JOIN HumanResources.EmployeePayHistory eph
-		ON eph.BusinessEntityID = p.BusinessEntityID
+		ON p.BusinessEntityID = eph.BusinessEntityID
 ORDER BY nameinfull;
 
 
@@ -393,11 +393,11 @@ SELECT TOP 100
 	, salaryinaweek = (eph.Rate * 40)
 FROM Person.Person p
 	INNER JOIN HumanResources.EmployeePayHistory eph
-		ON eph.BusinessEntityID = p.BusinessEntityID
+		ON p.BusinessEntityID = eph.BusinessEntityID
 WHERE eph.RateChangeDate = (SELECT MAX(RateChangeDate) 
 							FROM HumanResources.EmployeePayHistory 
 							WHERE BusinessEntityID = eph.BusinessEntityID)
-ORDER BY p.BusinessEntityID;
+ORDER BY nameinfull;
 
 -- Alternative with CTEs (Common Table Expression)
 
@@ -413,10 +413,10 @@ SELECT TOP 100
 	, salaryinaweek = (eph.Rate * 40)
 FROM Person.Person p
 	INNER JOIN HumanResources.EmployeePayHistory eph
-		ON eph.BusinessEntityID = p.BusinessEntityID
+		ON p.BusinessEntityID = eph.BusinessEntityID
 	INNER JOIN MAX_RateChangeDate max_rcd
-		ON max_rcd.entityID = eph.BusinessEntityID
-ORDER BY p.BusinessEntityID;
+		ON eph.BusinessEntityID = max_rcd.entityID
+ORDER BY nameinfull;
 
 
 /*
