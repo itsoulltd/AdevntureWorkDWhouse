@@ -41,3 +41,5 @@ SELECT TOP 10
 	*
 FROM A_Table
 ORDER BY A_Column;
+
+-- END OF LINE --

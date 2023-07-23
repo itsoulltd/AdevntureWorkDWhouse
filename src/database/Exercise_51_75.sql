@@ -41,3 +41,45 @@ SELECT TOP 10
 	*
 FROM A_Table
 ORDER BY A_Column;
+
+/*
+-- 56
+*/
+SELECT TOP 10
+	*
+FROM A_Table
+ORDER BY A_Column;
+
+/*
+-- 57
+*/
+SELECT TOP 10
+	*
+FROM A_Table
+ORDER BY A_Column;
+
+/*
+-- 58
+*/
+SELECT TOP 10
+	*
+FROM A_Table
+ORDER BY A_Column;
+
+/*
+-- 59
+*/
+SELECT TOP 10
+	*
+FROM A_Table
+ORDER BY A_Column;
+
+/*
+-- 60
+*/
+SELECT TOP 10
+	*
+FROM A_Table
+ORDER BY A_Column;
+
+-- END OF LINE --
