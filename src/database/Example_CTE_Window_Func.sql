@@ -57,5 +57,21 @@ FROM Sales.SalesOrderHeader soh
 WHERE 1 = 1
 	AND OrderDate BETWEEN '2011-05-31 00:00:00.000' AND '2011-08-17 00:00:00.000'
 ---
+---
+WITH Daily_SalseOrderHeader as (
+	SELECT SalesOrderID
+		, OrderDate
+		, SUM(SubTotal) as daily_total
+	FROM Sales.SalesOrderHeader
+	GROUP BY SalesOrderID, OrderDate
+)
+SELECT SalesOrderID
+	, OrderDate
+	, daily_total
+	, SUM(daily_total) OVER (ORDER BY OrderDate ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) as moving_3_day_sum
+FROM Daily_SalseOrderHeader
+WHERE 1 = 1
+	AND OrderDate BETWEEN '2011-05-31 00:00:00.000' AND '2011-08-17 00:00:00.000'
+---
 
 
