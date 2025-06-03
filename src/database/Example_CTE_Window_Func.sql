@@ -45,3 +45,17 @@ SELECT  dept_id
 FROM SalayHistory;
 
 
+------------------------------
+--Example of <function()> OVER (ORDER BY <Col> ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)
+--QA: Compute a 3-day moving sum, i.e., for each day, sum the sales from the current row and the 2 previous days.
+------------------------------
+SELECT SalesOrderID
+	, OrderDate
+	, SubTotal
+	, SUM(SubTotal) OVER (ORDER BY OrderDate ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) as moving_3_day_sum
+FROM Sales.SalesOrderHeader soh
+WHERE 1 = 1
+	AND OrderDate BETWEEN '2011-05-31 00:00:00.000' AND '2011-08-17 00:00:00.000'
+---
+
+
