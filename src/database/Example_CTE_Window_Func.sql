@@ -72,7 +72,7 @@ WHERE 1 = 1
 ---
 SELECT SalesOrderID, CustomerID
 	, OrderDate
-	, SUM(SubTotal) OVER (PARTITION BY CustomerID ORDER BY OrderDate) as running_total
+	, SUM(SubTotal) OVER (PARTITION BY CustomerID ORDER BY CustomerID, OrderDate) as running_total
 FROM Sales.SalesOrderHeader soh
 WHERE 1 = 1
 	AND OrderDate BETWEEN '2011-05-31 00:00:00.000' AND '2011-08-17 00:00:00.000'
