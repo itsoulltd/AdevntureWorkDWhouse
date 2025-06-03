@@ -59,13 +59,11 @@ WHERE 1 = 1
 ---
 ---
 WITH Daily_SalseOrderHeader as (
-	SELECT OrderDate
-		, SUM(SubTotal) as daily_total
+	SELECT OrderDate, SUM(SubTotal) as daily_total
 	FROM Sales.SalesOrderHeader
 	GROUP BY OrderDate
 )
-SELECT OrderDate
-	, daily_total
+SELECT OrderDate, daily_total
 	, SUM(daily_total) OVER (ORDER BY OrderDate ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) as moving_3_day_sum
 FROM Daily_SalseOrderHeader
 WHERE 1 = 1
