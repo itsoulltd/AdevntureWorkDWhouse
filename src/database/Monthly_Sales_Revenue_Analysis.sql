@@ -181,3 +181,17 @@ FROM Month_By_Month;
 -- returns 5
 ---------------------------------------------------------
 
+---------------------------------------------------------
+--Estimate the total revenue per customer over their lifetime.
+---------------------------------------------------------
+SELECT TOP(10) 
+	CustomerID
+	, COUNT(DISTINCT SalesOrderID) as Total_Order
+	, SUM(SubTotal) as Total_Spent
+	, SUM(TaxAmt) as Total_TaX_Paid
+	, FORMAT(MIN(OrderDate), 'yyyy-MM-dd') as First_Purchase
+	, FORMAT(MAX(OrderDate), 'yyyy-MM-dd') as Last_Purchase
+FROM Sales.SalesOrderHeader
+GROUP BY CustomerID
+ORDER BY Total_Spent DESC;
+
