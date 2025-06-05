@@ -137,3 +137,41 @@ WITH Customer_Many_Order AS (
 )
 SELECT COUNT(*) FROM Customer_Many_Order;
 -------------------------------------------------------
+
+-------------------------------------------------------
+--Month-over-Month (MoM) revenue growth
+-------------------------------------------------------
+WITH Orders_By_Month AS (
+	SELECT 
+		DATETRUNC(month, OrderDate) AS order_month
+		, SubTotal
+	FROM Sales.SalesOrderHeader
+	WHERE OrderDate between '2011-01-01 00:00:00.000' and '2011-12-31 00:00:00.000'
+),
+Revenue_By_Month AS (
+	SELECT 
+		order_month as 'month'
+		, SUM(SubTotal) as revenue
+	FROM Orders_By_Month
+	GROUP BY order_month
+),
+Month_By_Month AS (
+	SELECT 
+		month
+		, revenue as curr_revenue
+		, LAG(revenue, 1, 0) OVER (ORDER BY month) as prev_revenue
+	FROM Revenue_By_Month
+)
+SELECT 
+	month
+	, curr_revenue
+	, prev_revenue
+	, ROUND(((curr_revenue - prev_revenue) * 100.0) / NULLIF(prev_revenue, 0), 2) AS MoM_Growth
+FROM Month_By_Month;
+
+---------------------------------------------------------
+--SELECT 1/NULLIF(0, 0);
+-- NULLIF(expression1, expression2)
+-- Returns NULL IF (expression1 = expression2) ELSE expression1
+---------------------------------------------------------
+
