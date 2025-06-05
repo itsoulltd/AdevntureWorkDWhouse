@@ -101,3 +101,39 @@ SELECT * FROM Product_Sales_Top_By_Territory
 	Order By Revenue DESC;
 
 ------------------------------------------------------------
+--Top 5 customer by total spent
+------------------------------------------------------------
+
+WIth Customer_Total_Spent AS (
+	SELECT TOP(5)
+		CustomerID
+		, sum(SubTotal) as total_spent
+	FROM Sales.SalesOrderHeader
+	WHERE Status = 5
+	GROUP BY CustomerID
+	ORDER BY total_spent DESC
+)
+SELECT c.CustomerID
+	, c.AccountNumber
+	, CONCAT(p.FirstName, ' ', p.LastName) as Name
+	, ctp.total_spent as Total_Spent
+FROM Customer_Total_Spent as ctp
+JOIN Sales.Customer as c on ctp.CustomerID=c.CustomerID
+JOIN Person.Person as p on c.PersonID=p.BusinessEntityID
+
+--------------------------------------------------------
+--TOP 5 product by qty
+--------------------------------------------------------
+-- Almost similar
+
+--------------------------------------------------------
+--How many customer have made more than one order?
+--------------------------------------------------------
+WITH Customer_Many_Order AS (
+	SELECT CustomerID, COUNT(SalesOrderID) as Order_COUNT
+	FROM Sales.SalesOrderHeader
+	GROUP BY CustomerID
+	HAVING COUNT(SalesOrderID) > 1
+)
+SELECT COUNT(*) FROM Customer_Many_Order;
+-------------------------------------------------------
