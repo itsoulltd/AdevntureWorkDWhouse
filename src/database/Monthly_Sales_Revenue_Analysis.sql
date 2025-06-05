@@ -174,4 +174,10 @@ FROM Month_By_Month;
 -- NULLIF(expression1, expression2)
 -- Returns NULL IF (expression1 = expression2) ELSE expression1
 ---------------------------------------------------------
+--SELECT MIN(DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) as This_Month
+-- returns as of '2025-06-01'
+---------------------------------------------------------
+--SELECT DATEDIFF(MONTH, '2025-01-01', '2025-06-01') as DIFF_IN_MONTH
+-- returns 5
+---------------------------------------------------------
 
